@@ -24,7 +24,7 @@ A Puppeteer-based application that records user interactions with websites and s
 
 2. **Navigate to the project directory**:
    ```bash
-   cd interaction-recorder
+   cd chitragupta
    ```
 
 3. **Install dependencies**:
