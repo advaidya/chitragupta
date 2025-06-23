@@ -1,0 +1,24 @@
+{
+  "name": "interaction-recorder",
+  "version": "1.0.0",
+  "description": "A Puppeteer-based app to record user interactions with websites",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "puppeteer",
+    "interaction-recording",
+    "automation",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.11.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
