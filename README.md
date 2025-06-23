@@ -70,7 +70,7 @@ npm start https://example.com --headless
 npm start
 
 # Or record a specific website
-npm start https://www.example.com
+npm start https://purchase.allstate.com/onlineshopping/warmup/1
 
 # The browser opens and shows:
 # "Recording started. Interact with the page..."
