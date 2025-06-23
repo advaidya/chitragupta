@@ -33,7 +33,7 @@ A Puppeteer-based application that records user interactions with websites and s
 
 2. **Navigate to the project directory**:
    ```bash
-   cd interaction-recorder
+   cd chitragupta
    ```
 
 3. **Install dependencies**:
@@ -116,7 +116,7 @@ npm run playback recordings/interactions_1234567890.json -- --speed 0.5 --headle
 npm start
 
 # Or record a specific website
-npm start https://www.example.com
+npm start https://purchase.allstate.com/onlineshopping/warmup/1
 
 # The browser opens and shows:
 # "Recording started. Interact with the page..."
