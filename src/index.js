@@ -17,20 +17,48 @@ class InteractionRecorder {
   }
 
   // Initialize the browser and start recording
-  async initialize(url = 'https://example.com', headless = false) {
+  async initialize(url = 'https://purchase.allstate.com/onlineshopping/warmup/1', headless = false) {
     console.log('Launching browser...');
     
-    // Launch Chrome/Chromium browser
-    // headless: false means browser window will be visible
-    // defaultViewport: null uses full screen
+    // Launch Chrome/Chromium browser with minimal stealth settings
+    // These settings help avoid detection by websites that block automation
     this.browser = await puppeteer.launch({ 
       headless: headless,
       defaultViewport: null,
-      args: ['--start-maximized'] // Start browser maximized
+      args: [
+        '--start-maximized', // Start browser maximized
+        '--disable-blink-features=AutomationControlled', // Hide automation
+        '--disable-web-security', // Disable web security for better compatibility
+        '--disable-features=site-per-process' // Simplify process model
+      ]
     });
     
     // Create a new page (tab) in the browser
     this.page = await this.browser.newPage();
+    
+    // Remove basic automation indicators that websites might detect
+    await this.page.evaluateOnNewDocument(() => {
+      // Remove webdriver property
+      Object.defineProperty(navigator, 'webdriver', {
+        get: () => undefined,
+      });
+      
+      // Override the chrome property to look more like a real browser
+      if (!window.chrome) {
+        window.chrome = {
+          runtime: {},
+        };
+      }
+    });
+    
+    // Set a realistic user agent
+    await this.page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+    
+    // Set extra HTTP headers to look more like a real browser
+    await this.page.setExtraHTTPHeaders({
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    });
     
     // Set up event listeners to capture user interactions
     await this.setupEventListeners();
@@ -237,8 +265,8 @@ async function main() {
   // Create new recorder instance
   const recorder = new InteractionRecorder();
   
-  // Get URL from command line arguments, default to example.com
-  const url = process.argv[2] || 'https://example.com';
+  // Get URL from command line arguments, default to Allstate purchase page
+  const url = process.argv[2] || 'https://purchase.allstate.com/onlineshopping/warmup/1';
   // Check if --headless flag is provided
   const headless = process.argv.includes('--headless');
   

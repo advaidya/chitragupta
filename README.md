@@ -1,6 +1,6 @@
 # Interaction Recorder
 
-A Puppeteer-based application that records user interactions with websites and saves them in JSON format. This tool captures clicks, form inputs, navigation, and other user activities for analysis, testing, or automation purposes.
+A Puppeteer-based application that records user interactions with websites and saves them in JSON format. This tool captures clicks, form inputs, navigation, and other user activities for analysis, testing, or automation purposes. By default, it's configured to record interactions on the Allstate purchase flow.
 
 ## Features
 
@@ -37,7 +37,7 @@ A Puppeteer-based application that records user interactions with websites and s
 
 ### Basic Usage
 
-**Start recording with default website (example.com):**
+**Start recording with default website (Allstate purchase page):**
 ```bash
 npm start
 ```
@@ -51,6 +51,8 @@ npm start https://your-website.com
 
 **Run in headless mode (no browser window visible):**
 ```bash
+npm start --headless
+# Or with a specific URL
 npm start https://example.com --headless
 ```
 
@@ -64,7 +66,10 @@ npm start https://example.com --headless
 ### Example Session
 
 ```bash
-# Start recording
+# Start recording with default Allstate page
+npm start
+
+# Or record a specific website
 npm start https://www.example.com
 
 # The browser opens and shows:
@@ -100,14 +105,14 @@ The recorded interactions are saved as JSON files in the `recordings/` directory
 {
   "type": "click",
   "timestamp": 1234567890123,
-  "url": "https://example.com",
-  "pageTitle": "Example Domain",
+  "url": "https://purchase.allstate.com/onlineshopping/warmup/1",
+  "pageTitle": "Allstate Purchase Flow",
   "tagName": "BUTTON",
-  "id": "submit-btn",
+  "id": "continue-btn",
   "className": "btn btn-primary",
-  "text": "Submit Form",
+  "text": "Continue",
   "href": null,
-  "selector": "#submit-btn",
+  "selector": "#continue-btn",
   "coordinates": { "x": 150, "y": 300 }
 }
 ```
