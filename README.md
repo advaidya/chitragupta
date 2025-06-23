@@ -4,12 +4,21 @@ A Puppeteer-based application that records user interactions with websites and s
 
 ## Features
 
+### Recording Features
 - **Comprehensive Interaction Recording**: Captures clicks, text inputs, form changes, submissions, and page navigation
 - **Detailed Element Information**: Records element selectors, attributes, coordinates, and content
 - **JSON Output**: Saves all interactions in structured JSON format with timestamps
 - **Session Management**: Each recording session gets a unique ID and metadata
 - **Browser Control**: Run in visible or headless mode
 - **Real-time Recording**: Interactions are captured as they happen
+
+### Playback Features
+- **Accurate Replay**: Reproduces recorded interactions with precise timing and element targeting
+- **Speed Control**: Adjust playback speed from 0.25x to 4x (or any custom speed)
+- **Smart Element Finding**: Uses multiple selector strategies (ID, class, name, coordinates) for reliable playback
+- **Error Handling**: Continues playback even if individual interactions fail
+- **Progress Tracking**: Shows real-time progress during playback
+- **Flexible Navigation**: Handles page navigation and URL changes automatically
 
 ## Installation
 
@@ -35,7 +44,7 @@ A Puppeteer-based application that records user interactions with websites and s
 
 ## Usage
 
-### Basic Usage
+### Recording Interactions
 
 **Start recording with default website (Allstate purchase page):**
 ```bash
@@ -56,15 +65,52 @@ npm start --headless
 npm start https://example.com --headless
 ```
 
-### How to Use
+### Playing Back Recordings
+
+**Play back a recorded session:**
+```bash
+npm run playback recordings/interactions_1234567890.json
+```
+
+**Play back at different speeds:**
+```bash
+# Half speed (slower)
+npm run playback recordings/interactions_1234567890.json -- --speed 0.5
+
+# Double speed (faster)
+npm run playback recordings/interactions_1234567890.json -- --speed 2
+
+# Quarter speed (very slow for debugging)
+npm run playback recordings/interactions_1234567890.json -- --speed 0.25
+```
+
+**Play back in headless mode:**
+```bash
+npm run playback recordings/interactions_1234567890.json -- --headless
+```
+
+**Combine options:**
+```bash
+npm run playback recordings/interactions_1234567890.json -- --speed 0.5 --headless
+```
+
+### How to Use Recording
 
 1. **Run the command** - The browser will open and navigate to your specified URL
 2. **Interact with the website** - Click buttons, fill forms, navigate pages, etc.
 3. **Stop recording** - Press `Ctrl+C` (or `Cmd+C` on Mac) in the terminal
 4. **Check the output** - Your interactions will be saved in the `recordings/` folder
 
-### Example Session
+### How to Use Playback
 
+1. **Run the playback command** with a recording file - The browser will open and start replaying your interactions
+2. **Watch the automation** - The browser will automatically perform all recorded actions
+3. **Stop playback** - Press `Ctrl+C` (or `Cmd+C` on Mac) in the terminal to stop early, or let it complete
+4. **Analysis complete** - The playback will show you exactly how the interactions were performed
+
+### Example Sessions
+
+#### Recording Session
 ```bash
 # Start recording with default Allstate page
 npm start
@@ -81,6 +127,21 @@ npm start https://www.example.com
 # "Stopping recording..."
 # "Interactions saved to: recordings/interactions_1234567890.json"
 # "Total interactions recorded: 15"
+```
+
+#### Playback Session
+```bash
+# Play back the recorded interactions
+npm run playback recordings/interactions_1234567890.json
+
+# Terminal shows:
+# "Loaded recording: 1234567890"
+# "Total interactions: 15"
+# "Duration: 12/23/2024, 2:30:00 PM - 12/23/2024, 2:35:00 PM"
+# "Starting playback of 15 interactions at 1x speed..."
+# "[1/15] Playing: click on https://www.example.com"
+# "[2/15] Playing: input on https://www.example.com"
+# "✅ Playback completed successfully!"
 ```
 
 ## Output Format
@@ -176,7 +237,8 @@ The test will:
 ```
 interaction-recorder/
 ├── src/
-│   └── index.js          # Main application code
+│   ├── index.js          # Main recording application
+│   └── playback.js       # Playback application
 ├── test/
 │   └── test.js           # Test cases
 ├── recordings/           # Output directory (created automatically)
@@ -186,7 +248,7 @@ interaction-recorder/
 
 ## Troubleshooting
 
-### Common Issues
+### Recording Issues
 
 **Error: "Browser failed to launch"**
 - Make sure you have sufficient permissions
@@ -205,6 +267,28 @@ interaction-recorder/
 - Make sure you press `Ctrl+C` to stop recording properly
 - Check file permissions in the project directory
 - Look for error messages in the terminal
+
+### Playback Issues
+
+**Error: "Recording file not found"**
+- Check that the file path is correct
+- Use absolute or relative paths from the project root
+- Verify the recording file exists in the `recordings/` directory
+
+**Playback fails on specific interactions**
+- Website might have changed since recording
+- Try slower playback speed: `--speed 0.5`
+- Check browser console for JavaScript errors
+- Some interactions may be skipped but playback continues
+
+**Elements not found during playback**
+- Website structure may have changed
+- Use slower playback speed for better element detection
+- Check if the website requires login or has changed URLs
+
+**Playback too fast or slow**
+- Adjust speed with `--speed` option (0.25 = quarter speed, 2 = double speed)
+- Use `--speed 0.1` for very detailed debugging
 
 ### Performance Notes
 
