@@ -67,32 +67,60 @@ npm start https://example.com --headless
 
 ### Playing Back Recordings
 
+The playback system allows you to replay any recorded session with full automation control.
+
+#### Basic Playback Commands
+
 **Play back a recorded session:**
 ```bash
 npm run playback recordings/interactions_1234567890.json
 ```
 
-**Play back at different speeds:**
+**Available Options:**
+- `--speed <number>` - Playback speed multiplier (default: 1)
+- `--headless` - Run without visible browser window
+
+#### Speed Control Examples
+
 ```bash
-# Half speed (slower)
+# Debug mode (very slow)
+npm run playback recordings/interactions_1234567890.json -- --speed 0.1
+
+# Half speed (easier to follow)
 npm run playback recordings/interactions_1234567890.json -- --speed 0.5
+
+# Normal speed
+npm run playback recordings/interactions_1234567890.json -- --speed 1
 
 # Double speed (faster)
 npm run playback recordings/interactions_1234567890.json -- --speed 2
 
-# Quarter speed (very slow for debugging)
+# Custom speed
+npm run playback recordings/interactions_1234567890.json -- --speed 1.5
+```
+
+#### Advanced Usage
+
+**Silent background playback:**
+```bash
+npm run playback recordings/interactions_1234567890.json -- --headless --speed 2
+```
+
+**Debug specific interactions:**
+```bash
 npm run playback recordings/interactions_1234567890.json -- --speed 0.25
 ```
 
-**Play back in headless mode:**
-```bash
-npm run playback recordings/interactions_1234567890.json -- --headless
-```
+#### What Playback Supports
 
-**Combine options:**
-```bash
-npm run playback recordings/interactions_1234567890.json -- --speed 0.5 --headless
-```
+- ✅ **Clicks** - Buttons, links, any clickable elements
+- ✅ **Text Input** - Form fields, search boxes, text areas
+- ✅ **Form Controls** - Dropdowns, checkboxes, radio buttons
+- ✅ **Navigation** - Page changes, URL navigation
+- ✅ **Form Submission** - Form submissions and data entry
+- ✅ **Range Sliders** - Slider controls and range inputs
+- ✅ **Coordinate Fallback** - Uses mouse coordinates when selectors fail
+- ✅ **Smart Retry** - Multiple selector strategies for reliability
 
 ### How to Use Recording
 
@@ -220,7 +248,9 @@ The recorded interactions are saved as JSON files in the `recordings/` directory
 
 ## Testing
 
-Run the included tests to verify everything is working:
+### Basic Testing
+
+Run the included tests to verify recording functionality:
 
 ```bash
 npm test
@@ -231,6 +261,55 @@ The test will:
 - Test interaction recording
 - Test file saving
 - Validate JSON output format
+
+### Playback Testing
+
+Test the playback functionality with your recorded sessions:
+
+**Quick Test (First 10 interactions only):**
+```bash
+node test-playback.js
+```
+
+**Full Recording Playback:**
+```bash
+npm run playback recordings/interactions_XXXXXX.json
+```
+
+**Test Different Speeds:**
+```bash
+# Slow motion for debugging
+npm run playback recordings/interactions_XXXXXX.json -- --speed 0.25
+
+# Normal speed
+npm run playback recordings/interactions_XXXXXX.json -- --speed 1
+
+# Fast playback
+npm run playback recordings/interactions_XXXXXX.json -- --speed 2
+```
+
+**Test Headless Mode:**
+```bash
+npm run playback recordings/interactions_XXXXXX.json -- --headless
+```
+
+### End-to-End Testing
+
+Complete workflow test:
+
+```bash
+# 1. Record interactions (interact with the site, then Ctrl+C)
+npm start
+
+# 2. List your recordings
+ls recordings/
+
+# 3. Play back the recording
+npm run playback recordings/interactions_[your-session-id].json
+
+# 4. Test with different options
+npm run playback recordings/interactions_[your-session-id].json -- --speed 0.5 --headless
+```
 
 ## Project Structure
 
@@ -341,10 +420,41 @@ document.addEventListener('mouseover', (event) => {
 
 MIT License - feel free to modify and distribute.
 
+## Quick Reference
+
+### Available Commands
+
+```bash
+# Recording
+npm start                                    # Record with default Allstate URL
+npm start <url>                             # Record specific website
+npm start --headless                        # Record in headless mode
+npm start <url> --headless                  # Record specific URL headless
+
+# Playback
+npm run playback <recording-file>           # Basic playback
+npm run playback <file> -- --speed <num>   # Custom speed
+npm run playback <file> -- --headless      # Headless playback
+npm run playback <file> -- --speed 0.5 --headless  # Combined options
+
+# Testing
+npm test                                    # Run recording tests
+node test-playback.js                      # Quick playback test
+ls recordings/                             # List all recordings
+```
+
+### File Locations
+
+- **Recordings**: `recordings/interactions_[timestamp].json`
+- **Main recorder**: `src/index.js`
+- **Playback engine**: `src/playback.js`
+- **Tests**: `test/test.js` and `test-playback.js`
+
 ## Support
 
 If you encounter issues:
 1. Check the troubleshooting section above
 2. Make sure you have the latest Node.js version
 3. Try running the test suite: `npm test`
-4. Check the terminal output for specific error messages
+4. For playback issues, try slower speeds: `--speed 0.25`
+5. Check the terminal output for specific error messages
